@@ -7,6 +7,28 @@ class User:
         self.rental_list = rental_list
 
 
+class Bike:
+
+    def __init__(self, serial_number, is_rented = False):
+        self.serial_number = serial_number
+        self.is_rented = is_rented
+
+
+class Electric_bike(Bike):
+
+    def __init__(self, serial_number, is_rented = False, is_charged = True):
+        super().__init__(serial_number, is_rented)
+        self.type = "Electric"
+        self.is_charged = is_charged
+
+
+class Road_bike(Bike):
+
+    def __init__(self, serial_number, is_rented = False):
+        super().__init__(serial_number, is_rented)
+        self.type = "Road"
+
+
 def main():
     pass
 
