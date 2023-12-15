@@ -3,10 +3,12 @@ from msvcrt import getch
 
 class User:
 
-    def __init__(self, f_name, l_name, username, rental_list = []):
+    def __init__(self, f_name, l_name, username, password, is_admin, rental_list = []):
         self.f_name = f_name
         self.l_name = l_name
         self.username = username
+        self.password = password
+        self.is_admin = is_admin
         self.rental_list = rental_list
 
 
@@ -63,11 +65,11 @@ Enter a number:""")
     
         input_list = ["1", "2", "3"]
         user_input = str(getch())[2]
-    
+
         while user_input not in input_list:
             print("[-] You can only select 1, 2 or 3")
             user_input = str(getch())[2]
-    
+
         match user_input:
             case "1":
                 pass
