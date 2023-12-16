@@ -1,4 +1,5 @@
 from msvcrt import getch
+import database
 
 
 heading_text = """
@@ -71,8 +72,7 @@ def main():
         print(sign_in_text)
     
         input_list = ["1", "2", "3"]
-        user_input = str(getch())[2]
-        while user_input not in input_list:
+        while (user_input := str(getch())[2]) not in input_list:
             print("[-] You can only select 1, 2 or 3")
             user_input = str(getch())[2]
 
