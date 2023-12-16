@@ -66,6 +66,28 @@ def check_username(uname):
     return uname
 
 
+def check_password_length(pswrd):
+    while len(pswrd) < 8:
+        print("Password should be at least 8 characters!")
+        pswrd = input("Press 'Enter' to exit or Type in a new password: ")
+        if not pswrd:
+            return None
+    return pswrd
+
+
+def check_password_confirmation(pswrd, confirm_pswrd):
+    while pswrd != confirm_pswrd:
+        print("Passwords do not match!")
+        password = input("Press 'Enter' to exit or Type in a new password: ")
+        if not password:
+            return None
+        pswrd = check_password_length(password)
+        if not pswrd:
+            return None
+        confirm_pswrd = input("Enter your password again: ")
+    return confirm_pswrd
+
+
 def sign_in(username, password):
     pass
 
