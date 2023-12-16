@@ -1,6 +1,34 @@
 import sqlite3
 
 
+queries = {
+    "create_users_table_query": """CREATE TABLE IF NOT EXISTS users (
+        first_name TEXT,
+        last_name TEXT,
+        username TEXT,
+        password TEXT,
+        is_admin INTEGER,
+        rental_list TEXT
+    );""",
+
+    "create_bikes_table_query": """CREATE TABLE IF NOT EXISTS bikes (
+        serial_number TEXT,
+        type TEXT,
+        is_rented INTEGER,
+        is_charged INTERGER
+    );"""
+}
+
+
 def connect(database_name):
     return sqlite3.connect(database_name)
     
+
+def create_users_table(connection):
+    with connection:
+        connection.execute(queries.create_users_table_query)
+
+
+def create_bikes_table(connection):
+    with connection:
+        connection.execute(queries.create_bikes_table_query)
