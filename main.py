@@ -32,6 +32,16 @@ class User:
         self.is_admin = is_admin
         self.rental_list = rental_list
 
+    def add_to_database(self):
+        connection = database.connect("data.db")
+        database.add_user(connection,
+                          self.f_name,
+                          self.l_name,
+                          self.username,
+                          self.password,
+                          self.is_admin,
+                          self.rental_list)
+
 
 class Bike:
 
@@ -92,9 +102,38 @@ def sign_in(username, password):
     pass
 
 
-def creat_account():
-    pass
+def create_account():
 
+    connection = database.connect("data.db")
+    database.create_users_table(connection)
+
+    is_admin = False
+    # The first person who creates an account becomes admin
+    if not len(database.get_all_users(connection)):
+        is_admin = True
+
+    username = input("Enter a username: ")
+    checked_username = check_username(username)
+    if not checked_username:
+        return None
+        
+    password = input("Enter your password (At least 8 characters): ")
+    length_checked_password = check_password_length(password)
+    if not length_checked_password:
+        return None
+        
+    confirm_password = input("Enter your password again: ")
+    confirm_password_checked = check_password_confirmation(length_checked_password, confirm_password)
+    if not confirm_password_checked:
+        return None
+    
+    f_name = input("Enter your first name: ")
+    l_name = input("Enter your last name: ")
+
+    new_user = User(f_name, l_name, username, password, is_admin)
+    new_user.add_to_database()
+    return username
+    
 
 def main():
 
@@ -115,7 +154,7 @@ def main():
                 pass
 
             case "2":
-                pass
+                logged_in_user = create_account()
                 
             case "3":
                 return 0
