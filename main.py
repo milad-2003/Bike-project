@@ -24,7 +24,7 @@ Enter a number:"""
 
 class User:
 
-    def __init__(self, f_name, l_name, username, password, is_admin, rental_list = []):
+    def __init__(self, f_name, l_name, username, password, is_admin, rental_list = ""):
         self.f_name = f_name
         self.l_name = l_name
         self.username = username
@@ -35,14 +35,14 @@ class User:
 
 class Bike:
 
-    def __init__(self, serial_number, is_rented = False):
+    def __init__(self, serial_number, is_rented = 0):
         self.serial_number = serial_number
         self.is_rented = is_rented
 
 
 class Electric_bike(Bike):
 
-    def __init__(self, serial_number, is_rented = False, is_charged = True):
+    def __init__(self, serial_number, is_rented = 0, is_charged = 1):
         super().__init__(serial_number, is_rented)
         self.type = "Electric"
         self.is_charged = is_charged
@@ -50,7 +50,7 @@ class Electric_bike(Bike):
 
 class Road_bike(Bike):
 
-    def __init__(self, serial_number, is_rented = False):
+    def __init__(self, serial_number, is_rented = 0):
         super().__init__(serial_number, is_rented)
         self.type = "Road"
 

@@ -30,20 +30,20 @@ def connect(database_name):
 
 def create_users_table(connection):
     with connection:
-        connection.execute(queries.create_users_table_query)
+        connection.execute(queries["create_users_table_query"])
 
 
 def create_bikes_table(connection):
     with connection:
-        connection.execute(queries.create_bikes_table_query)
+        connection.execute(queries["create_bikes_table_query"])
 
 
 def get_all_users(connection):
     with connection:
-        return connection.execute(queries.get_all_users_query).fetchall()
+        return connection.execute(queries["get_all_users_query"]).fetchall()
 
 
 def add_user(connection, first_name, last_name, username, password, is_admin, rental_list):
     with connection:
-        connection.execute(queries.add_user,
-                           first_name, last_name, username, password, is_admin, rental_list)
+        connection.execute(queries["add_user_query"],
+                           (first_name, last_name, username, password, is_admin, rental_list))
