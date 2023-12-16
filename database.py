@@ -18,7 +18,9 @@ queries = {
         is_charged INTERGER
     );""",
 
-    "get_all_users_query": "SELECT * FROM users;"
+    "get_all_users_query": "SELECT * FROM users;",
+
+    "add_user_query": "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);"
 }
 
 
@@ -39,3 +41,8 @@ def create_bikes_table(connection):
 def get_all_users(connection):
     with connection:
         return connection.execute(queries.get_all_users_query).fetchall()
+
+
+def add_user(connection):
+    with connection:
+        connection.execute(queries.add_user)
