@@ -43,6 +43,7 @@ def get_all_users(connection):
         return connection.execute(queries.get_all_users_query).fetchall()
 
 
-def add_user(connection):
+def add_user(connection, first_name, last_name, username, password, is_admin, rental_list):
     with connection:
-        connection.execute(queries.add_user)
+        connection.execute(queries.add_user,
+                           first_name, last_name, username, password, is_admin, rental_list)
