@@ -55,6 +55,17 @@ class Road_bike(Bike):
         self.type = "Road"
 
 
+def check_username(uname):
+    connection = database.connect("data.db")
+    usernames = [x[2] for x in database.get_all_users(connection)]
+    while uname in usernames:
+        print("Username already exists!")
+        uname = input("Press 'Enter' to exit or Type in a new username: ")
+        if not uname:
+            return None
+    return uname
+
+
 def sign_in(username, password):
     pass
 
@@ -77,10 +88,13 @@ def main():
             user_input = str(getch())[2]
 
         match user_input:
+
             case "1":
                 pass
+
             case "2":
                 pass
+                
             case "3":
                 return 0
 

@@ -16,7 +16,9 @@ queries = {
         type TEXT,
         is_rented INTEGER,
         is_charged INTERGER
-    );"""
+    );""",
+
+    "get_all_users_query": "SELECT * FROM users;"
 }
 
 
@@ -32,3 +34,8 @@ def create_users_table(connection):
 def create_bikes_table(connection):
     with connection:
         connection.execute(queries.create_bikes_table_query)
+
+
+def get_all_users(connection):
+    with connection:
+        return connection.execute(queries.get_all_users_query).fetchall()
