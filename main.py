@@ -1,5 +1,7 @@
 from msvcrt import getch
 import database
+from os import system as command
+from platform import system as os
 
 
 heading_text = """
@@ -115,18 +117,21 @@ def sign_in(uname):
         while user_input not in input_list:
             print("[-] You can only enter 'Y' or 'N'")
             user_input = str(getch())[2]
-            
+
         if user_input == "y":
             return create_account(uname)
         else:
             return None
     
     password = input("Enter your password: ")
-    if password == user[3]:
-        return uname
-    else:
+    while password != user[3]:
         print("Username and password do not match!")
-        return None
+        password = input("Press 'Enter' to exit or Type in your password again: ")
+        
+        if not password:
+            return None
+    
+    return uname
 
 
 def create_account(uname):
