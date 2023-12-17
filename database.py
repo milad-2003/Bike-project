@@ -20,7 +20,9 @@ queries = {
 
     "get_all_users_query": "SELECT * FROM users;",
 
-    "add_user_query": "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);"
+    "add_user_query": "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);",
+
+    "get_user_by_username_query": "SELECT * FROM users WHERE username = ?;"
 }
 
 
@@ -47,3 +49,8 @@ def add_user(connection, first_name, last_name, username, password, is_admin, re
     with connection:
         connection.execute(queries["add_user_query"],
                            (first_name, last_name, username, password, is_admin, rental_list))
+
+
+def get_user_by_username(connection, username):
+    with connection:
+        return connection.execute(queries["get_user_by_username_query"], (username, )).fetchone()

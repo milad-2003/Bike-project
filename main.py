@@ -73,7 +73,8 @@ def check_username(uname):
         uname = input("Press 'Enter' to exit or Type in a new username: ")
         if not uname:
             return None
-    return uname
+        
+    return uname.lower()
 
 
 def check_password_length(pswrd):
@@ -82,6 +83,7 @@ def check_password_length(pswrd):
         pswrd = input("Press 'Enter' to exit or Type in a new password: ")
         if not pswrd:
             return None
+        
     return pswrd
 
 
@@ -95,6 +97,7 @@ def check_password_confirmation(pswrd, confirm_pswrd):
         if not pswrd:
             return None
         confirm_pswrd = input("Enter your password again: ")
+
     return confirm_pswrd
 
 
@@ -132,6 +135,7 @@ def create_account():
 
     new_user = User(f_name, l_name, username, password, is_admin)
     new_user.add_to_database()
+
     return username
     
 
