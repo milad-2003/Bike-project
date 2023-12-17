@@ -105,10 +105,21 @@ def sign_in(uname):
     connection = database.connect("data.db")
     user = database.get_user_by_username(connection, uname)
 
-    # Return None if username not found
+    # Ask for creating an account with the username if its not found
     if not user:
         print("Username not found!")
-        return None
+        print(f"Create an account with '{uname}'? (Y/N)")
+
+        user_input = str(getch())[2]
+        input_list = ["y", "n", "Y", "N"]
+        while user_input not in input_list:
+            print("[-] You can only enter 'Y' or 'N'")
+            user_input = str(getch())[2]
+            
+        if user_input == "y":
+            return create_account(uname)
+        else:
+            return None
     
     password = input("Enter your password: ")
     if password == user[3]:
@@ -118,7 +129,7 @@ def sign_in(uname):
         return None
 
 
-def create_account():
+def create_account(uname):
 
     connection = database.connect("data.db")
     database.create_users_table(connection)
@@ -128,8 +139,7 @@ def create_account():
     if not len(database.get_all_users(connection)):
         is_admin = True
 
-    username = input("Enter a username: ")
-    checked_username = check_username(username)
+    checked_username = check_username(uname)
     if not checked_username:
         return None
         
@@ -146,10 +156,10 @@ def create_account():
     f_name = input("Enter your first name: ")
     l_name = input("Enter your last name: ")
 
-    new_user = User(f_name, l_name, username, password, is_admin)
+    new_user = User(f_name, l_name, checked_username, password, is_admin)
     new_user.add_to_database()
 
-    return username
+    return checked_username
     
 
 def main():
@@ -173,7 +183,9 @@ def main():
                 logged_in_user = sign_in(username.lower())
 
             case "2":
-                logged_in_user = create_account()
+                username = input("Enter a username: ")
+
+                logged_in_user = create_account(username)
                  
             case "3":
                 return 0
