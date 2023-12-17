@@ -103,6 +103,13 @@ def check_password_confirmation(pswrd, confirm_pswrd):
     return confirm_pswrd
 
 
+def cls():
+    if os() == "Windows":
+        command("cls")
+    else:
+        command("clear")
+    
+
 def sign_in(uname):
     connection = database.connect("data.db")
     user = database.get_user_by_username(connection, uname)
@@ -119,8 +126,11 @@ def sign_in(uname):
             user_input = str(getch())[2]
 
         if user_input == "y":
+            cls()
+            print(f"Creating account with username: {uname}")
             return create_account(uname)
         else:
+            cls()
             return None
     
     password = input("Enter your password: ")
@@ -129,8 +139,10 @@ def sign_in(uname):
         password = input("Press 'Enter' to exit or Type in your password again: ")
         
         if not password:
+            cls()
             return None
     
+    cls()
     return uname
 
 
@@ -146,16 +158,19 @@ def create_account(uname):
 
     checked_username = check_username(uname)
     if not checked_username:
+        cls()
         return None
         
     password = input("Enter your password (At least 8 characters): ")
     length_checked_password = check_password_length(password)
     if not length_checked_password:
+        cls()
         return None
         
     confirm_password = input("Enter your password again: ")
     confirm_password_checked = check_password_confirmation(length_checked_password, confirm_password)
     if not confirm_password_checked:
+        cls()
         return None
     
     f_name = input("Enter your first name: ")
@@ -164,8 +179,9 @@ def create_account(uname):
     new_user = User(f_name, l_name, checked_username, password, is_admin)
     new_user.add_to_database()
 
+    cls()
     return checked_username
-    
+
 
 def main():
 
@@ -180,14 +196,17 @@ def main():
             print("[-] You can only select 1, 2 or 3")
             user_input = str(getch())[2]
 
+        cls()
         match user_input:
 
             case "1":
+                print("Signing in...")
                 username = input("Enter your username: ")
 
                 logged_in_user = sign_in(username.lower())
 
             case "2":
+                print("Creating account...")
                 username = input("Enter a username: ")
 
                 logged_in_user = create_account(username)
