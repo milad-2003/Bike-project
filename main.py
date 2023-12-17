@@ -101,8 +101,21 @@ def check_password_confirmation(pswrd, confirm_pswrd):
     return confirm_pswrd
 
 
-def sign_in(username, password):
-    pass
+def sign_in(uname):
+    connection = database.connect("data.db")
+    user = database.get_user_by_username(connection, uname)
+
+    # Return None if username not found
+    if not user:
+        print("Username not found!")
+        return None
+    
+    password = input("Enter your password: ")
+    if password == user[3]:
+        return uname
+    else:
+        print("Username and password do not match!")
+        return None
 
 
 def create_account():
@@ -155,11 +168,13 @@ def main():
         match user_input:
 
             case "1":
-                pass
+                username = input("Enter your username: ")
+
+                logged_in_user = sign_in(username.lower())
 
             case "2":
                 logged_in_user = create_account()
-                
+                 
             case "3":
                 return 0
 
