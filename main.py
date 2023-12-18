@@ -23,6 +23,26 @@ sign_in_text = """
           
 Enter a number:"""
 
+admin_menu_text = """
+1.Available bikes
+2.Rented bikes
+3.Return a bike
+4.Rent a bike
+5.Add a bike
+6.Delete a user
+7.List of bikes
+8.List of users
+9.Set a user as admin
+0.Log out
+"""
+
+user_menu_text = """
+1.Available bikes
+2.Return a bike
+3.Rent a bike
+0.Log out
+"""
+
 
 class User:
 
@@ -183,6 +203,14 @@ def create_account(uname):
     return checked_username
 
 
+def admin_login():
+    pass
+
+
+def user_login():
+    pass
+
+
 def main():
 
     while True:
@@ -213,6 +241,15 @@ def main():
                  
             case "3":
                 return 0
+            
+        if logged_in_user:
+            connection = database.connect("data.db")
+            user = database.get_user_by_username(connection, logged_in_user)
+            
+            if user[4]:
+                logged_in_user = admin_login(logged_in_user)
+            else:
+                logged_in_user = user_login(logged_in_user)
 
 
 if __name__ == "__main__":
