@@ -37,6 +37,7 @@ admin_menu_text = """
 """
 
 user_menu_text = """
+
 1.Available bikes
 2.Return a bike
 3.Rent a bike
@@ -203,12 +204,66 @@ def create_account(uname):
     return checked_username
 
 
-def admin_login():
-    pass
+def admin_login(uname):
+    connection = database.connect("data.db")
+    user = database.get_user_by_username(connection, uname)
+    
+    print("   ### Admin ###")
+
+    print(admin_menu_text)
+    
+    input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+    user_input = str(getch())[2]
+    while user_input not in input_list:
+        print("[-] Invalid input!")
+        user_input = str(getch())[2]
+
+    match user_input:
+        case "1":
+            pass
+        case "2":
+            pass
+        case "3":
+            pass
+        case "4":
+            pass
+        case "5":
+            pass
+        case "6":
+            pass
+        case "7":
+            pass
+        case "8":
+            pass
+        case "9":
+            pass
+        case "0":
+            cls()
+            return None
 
 
-def user_login():
-    pass
+def user_login(uname):
+    connection = database.connect("data.db")
+    user = database.get_user_by_username(connection, uname)
+
+    print(user_menu_text)
+
+    input_list = ["1", "2", "3", "0"]
+    user_input = str(getch())[2]
+    while user_input not in input_list:
+        print("[-] Invalid input!")
+        user_input = str(getch())[2]
+
+    match user_input:
+        case "1":
+            pass
+        case "2":
+            pass
+        case "3":
+            pass
+        case "0":
+            cls()
+            return None
 
 
 def main():
@@ -245,6 +300,8 @@ def main():
         if logged_in_user:
             connection = database.connect("data.db")
             user = database.get_user_by_username(connection, logged_in_user)
+            
+            print(f"Welcome {user[0]} {user[1]}!", end="")
             
             if user[4]:
                 logged_in_user = admin_login(logged_in_user)
