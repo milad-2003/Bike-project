@@ -151,10 +151,10 @@ def create_account(uname):
     connection = database.connect("data.db")
     database.create_users_table(connection)
 
-    is_admin = False
+    is_admin = 0
     # The first person who creates an account becomes admin
     if not len(database.get_all_users(connection)):
-        is_admin = True
+        is_admin = 1
 
     checked_username = check_username(uname)
     if not checked_username:
