@@ -220,9 +220,27 @@ def create_account(uname):
     return checked_username
 
 
+def check_serial_number(serial_num):
+    connection = database.connect("data.db")
+    serial_numbers = [x[0] for x in database.get_all_bikes(connection)]
+
+    while serial_num in serial_numbers:
+        print("[-] Serial number already exists!")
+        serial_num = input("Press 'Enter' to exit or Type in a new serial number: ")
+        if not serial_num:
+            return None
+    
+    return serial_num
+
+
 def add_bike():
     connection = database.connect("data.db")
     database.create_bikes_table(connection)
+
+    serial_number = input("Enter the serial number: ")
+    checked_serial_number = check_serial_number(serial_number)
+    if not checked_serial_number:
+        return None
 
 
 def admin_login(uname):
@@ -277,17 +295,17 @@ def user_login(uname):
     while True:
         connection = database.connect("data.db")
         user = database.get_user_by_username(connection, uname)
-
+            
         print(f"Welcome {user[0]} {user[1]}!")
-
+    
         print(user_menu_text)
-
+    
         input_list = ["1", "2", "3", "0"]
         user_input = str(getch())[2]
         while user_input not in input_list:
             print("[-] Invalid input!")
             user_input = str(getch())[2]
-
+    
         match user_input:
             case "1":
                 pass

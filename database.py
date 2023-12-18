@@ -24,7 +24,9 @@ queries = {
 
     "get_user_by_username_query": "SELECT * FROM users WHERE username = ?;",
 
-    "add_bike_query": "INSERT INTO bikes VALUES (?, ?, ?, ?);"
+    "add_bike_query": "INSERT INTO bikes VALUES (?, ?, ?, ?);",
+
+    "get_all_bikes_query": "SELECT * FROM bikes;"
 }
 
 
@@ -57,7 +59,13 @@ def get_user_by_username(connection, username):
     with connection:
         return connection.execute(queries["get_user_by_username_query"], (username, )).fetchone()
 
+
 def add_bike(connection, serial_number, type, is_rented, is_charged):
     with connection:
         connection.execute(queries["add_bike_query"],
                            (serial_number, type, is_rented, is_charged))
+
+
+def get_all_bikes(connection):
+    with connection:
+        return connection.execute(queries["get_all_bikes_query"]).fetchall()
