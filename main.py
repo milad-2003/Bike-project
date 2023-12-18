@@ -68,24 +68,41 @@ class User:
 
 class Bike:
 
-    def __init__(self, serial_number, is_rented = 0):
+    def __init__(self, serial_number, type, is_rented = 0):
         self.serial_number = serial_number
         self.is_rented = is_rented
+        self.type = type
 
 
 class Electric_bike(Bike):
 
-    def __init__(self, serial_number, is_rented = 0, is_charged = 1):
-        super().__init__(serial_number, is_rented)
-        self.type = "Electric"
+    def __init__(self, serial_number, type, is_rented = 0, is_charged = 1):
+        super().__init__(serial_number, type, is_rented)
         self.is_charged = is_charged
+
+    
+    def add_to_database(self):
+        connection = database.connect("data.db")
+        database.add_bike(connection,
+                          self.serial_number,
+                          self.type,
+                          self.is_rented,
+                          self.is_charged)
 
 
 class Road_bike(Bike):
 
-    def __init__(self, serial_number, is_rented = 0):
-        super().__init__(serial_number, is_rented)
-        self.type = "Road"
+    def __init__(self, serial_number, type, is_rented = 0):
+        super().__init__(serial_number, type, is_rented)
+
+    
+    def add_to_database(self):
+        connection = database.connect("data.db")
+        database.add_bike(connection,
+                          self.serial_number,
+                          self.type,
+                          self.is_rented,
+                          None)
 
 
 def check_username(uname):
@@ -204,6 +221,11 @@ def create_account(uname):
     return checked_username
 
 
+def add_bike():
+    connection = database.connect("data.db")
+    database.create_bikes_table(connection)
+
+
 def admin_login(uname):
     connection = database.connect("data.db")
     user = database.get_user_by_username(connection, uname)
@@ -221,22 +243,31 @@ def admin_login(uname):
     match user_input:
         case "1":
             pass
+
         case "2":
             pass
+
         case "3":
             pass
+
         case "4":
             pass
+
         case "5":
-            pass
+            add_bike()
+
         case "6":
             pass
+        
         case "7":
             pass
+        
         case "8":
             pass
+
         case "9":
             pass
+
         case "0":
             cls()
             return None
