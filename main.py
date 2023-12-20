@@ -234,13 +234,40 @@ def check_serial_number(serial_num):
 
 
 def add_bike():
+    print("Adding a bike...")
     connection = database.connect("data.db")
     database.create_bikes_table(connection)
 
     serial_number = input("Enter the serial number: ")
     checked_serial_number = check_serial_number(serial_number)
     if not checked_serial_number:
+        cls()
         return None
+    
+    input_list = ["r", "e"]
+    print("What's the type of the bike?\nEnter 'R' for 'Road' or 'E' for 'Electric': ")
+    type = (str(getch())[2]).lower()
+    while type not in input_list:
+        print("[-] Invalid input!")
+        print("Enter 'R' for 'Road' or 'E' for 'Electric' or Press 'Enter' to exit: ")
+        user_input = (str(getch())).lower()
+        if user_input[2:4] == "\\r":
+            cls()
+            return None
+        type = user_input[2]
+
+    match type:
+        case "r":
+            bike = Road_bike(checked_serial_number, "Road")
+            bike.add_to_database()
+
+        case "e":
+            bike = Electric_bike(checked_serial_number, "Electric")
+            bike.add_to_database()
+
+    print("[+] Bike added successfully!")
+    input("Press 'Enter' to exit")
+    cls()
 
 
 def admin_login(uname):
@@ -258,6 +285,7 @@ def admin_login(uname):
             print("[-] Invalid input!")
             user_input = str(getch())[2]
 
+        cls()
         match user_input:
             case "1":
                 pass
