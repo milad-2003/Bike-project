@@ -2,6 +2,8 @@ from msvcrt import getch
 import database
 from os import system as command
 from platform import system as os
+from rich.console import Console
+from rich.table import Table
 
 
 heading_text = """
@@ -241,7 +243,6 @@ def add_bike():
     serial_number = input("Enter the serial number: ")
     checked_serial_number = check_serial_number(serial_number)
     if not checked_serial_number:
-        cls()
         return None
     
     input_list = ["r", "e"]
@@ -252,7 +253,6 @@ def add_bike():
         print("Enter 'R' for 'Road' or 'E' for 'Electric' or Press 'Enter' to exit: ")
         user_input = (str(getch())).lower()
         if user_input[2:4] == "\\r":
-            cls()
             return None
         type = user_input[2]
 
@@ -267,7 +267,33 @@ def add_bike():
 
     print("[+] Bike added successfully!")
     input("Press 'Enter' to exit")
-    cls()
+
+
+def print_table(title, columns, rows):
+    table = Table(title=title)
+
+    for column in columns:
+        table.add_column(column)
+
+    # Converting all the values of the rows to string so they are renderable by the table
+    str_rows = [[str(value) for value in row] for row in rows]
+
+    for row in str_rows:
+        table.add_row(*row, style="bright_green")
+
+    console = Console()
+    console.print(table)
+
+
+def get_all_users():
+    connection = database.connect("data.db")
+    users = database.get_all_users(connection)
+
+    columns = ["First name", "Last name", "Username", "Password", "Admin", "Rental list"]
+
+    print_table("Users", columns, users)
+
+    input("\n\nPress 'Enter' to exit")
 
 
 def admin_login(uname):
@@ -301,6 +327,7 @@ def admin_login(uname):
 
             case "5":
                 add_bike()
+                cls()
 
             case "6":
                 pass
@@ -309,7 +336,8 @@ def admin_login(uname):
                 pass
 
             case "8":
-                pass
+                get_all_users()
+                cls()
 
             case "9":
                 pass
