@@ -313,6 +313,27 @@ def get_all_bikes(availables_only = False):
     input("\n\nPress 'Enter' to exit")
 
 
+def set_admin():
+    connection = database.connect("data.db")
+    usernames = [user[2] for user in database.get_all_users(connection)]
+
+    username = input("Enter the username of the user: ")
+    while username not in usernames:
+        print("[-] User not found!")
+        username = input("Press 'Enter' to exit or Type in the username again: ")
+        if not username:
+            return None
+    
+    print(f"Setting username '{username}' as admin...")
+    confirmation = input("Type 'CONFIRM' to continue: ")
+    while confirmation != "CONFIRM":
+        print("[-] Confirmation failed!")
+        confirmation = input("Press 'Enter' to exit or Type 'CONFIRM' to continue: ")
+        if not confirmation:
+            return None
+
+    database.set_as_admin(connection, username)
+
 def admin_login(uname):
     while True:
         connection = database.connect("data.db")
@@ -355,7 +376,7 @@ def admin_login(uname):
                 get_all_users()
 
             case "9":
-                pass
+                set_admin()
 
             case "0":
                 cls()
