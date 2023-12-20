@@ -296,6 +296,17 @@ def get_all_users():
     input("\n\nPress 'Enter' to exit")
 
 
+def get_all_bikes():
+    connection = database.connect("data.db")
+    bikes = database.get_all_bikes(connection)
+
+    columns = ["Serial number", "Type", "Rented", "Charged"]
+
+    print_table("Bikes", columns, bikes)
+
+    input("\n\nPress 'Enter' to exit")
+
+
 def admin_login(uname):
     while True:
         connection = database.connect("data.db")
@@ -327,17 +338,15 @@ def admin_login(uname):
 
             case "5":
                 add_bike()
-                cls()
 
             case "6":
                 pass
             
             case "7":
-                pass
+                get_all_bikes()
 
             case "8":
                 get_all_users()
-                cls()
 
             case "9":
                 pass
@@ -345,6 +354,8 @@ def admin_login(uname):
             case "0":
                 cls()
                 return None
+            
+        cls()
 
 
 def user_login(uname):
