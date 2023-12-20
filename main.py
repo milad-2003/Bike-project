@@ -296,13 +296,19 @@ def get_all_users():
     input("\n\nPress 'Enter' to exit")
 
 
-def get_all_bikes():
+def get_all_bikes(availables_only = False):
     connection = database.connect("data.db")
-    bikes = database.get_all_bikes(connection)
+
+    if availables_only:
+        bikes = database.available_bikes(connection)
+        table_title = "Available bikes"
+    else:
+        bikes = database.get_all_bikes(connection)
+        table_title = "Bikes"
 
     columns = ["Serial number", "Type", "Rented", "Charged"]
 
-    print_table("Bikes", columns, bikes)
+    print_table(table_title, columns, bikes)
 
     input("\n\nPress 'Enter' to exit")
 
@@ -325,7 +331,7 @@ def admin_login(uname):
         cls()
         match user_input:
             case "1":
-                pass
+                get_all_bikes(availables_only=True)
 
             case "2":
                 pass
@@ -372,17 +378,23 @@ def user_login(uname):
         while user_input not in input_list:
             print("[-] Invalid input!")
             user_input = str(getch())[2]
-    
+
+        cls()
         match user_input:
             case "1":
-                pass
+                get_all_bikes(availables_only=True)
+
             case "2":
                 pass
+
             case "3":
                 pass
+            
             case "0":
                 cls()
                 return None
+        
+        cls()
 
 
 def main():

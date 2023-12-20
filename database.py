@@ -26,7 +26,9 @@ queries = {
 
     "add_bike_query": "INSERT INTO bikes VALUES (?, ?, ?, ?);",
 
-    "get_all_bikes_query": "SELECT * FROM bikes;"
+    "get_all_bikes_query": "SELECT * FROM bikes;",
+
+    "available_bikes_query": "SELECT * FROM bikes WHERE is_rented = 0;"
 }
 
 
@@ -69,3 +71,8 @@ def add_bike(connection, serial_number, type, is_rented, is_charged):
 def get_all_bikes(connection):
     with connection:
         return connection.execute(queries["get_all_bikes_query"]).fetchall()
+
+
+def available_bikes(connection):
+    with connection:
+        return connection.execute(queries["available_bikes_query"]).fetchall()
