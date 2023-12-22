@@ -31,10 +31,11 @@ admin_menu_text = """
 3.Return a bike
 4.Rent a bike
 5.Add a bike
-6.Delete a user
+6.Edit profile
 7.List of bikes
 8.List of users
 9.Set a user as admin
+c.Charge a bike
 0.Log out
 """
 
@@ -42,6 +43,7 @@ user_menu_text = """
 1.Available bikes
 2.Return a bike
 3.Rent a bike
+4.Edit profile
 0.Log out
 """
 
@@ -334,6 +336,7 @@ def set_admin():
 
     database.set_as_admin(connection, username)
 
+
 def admin_login(uname):
     while True:
         connection = database.connect("data.db")
@@ -343,11 +346,11 @@ def admin_login(uname):
 
         print(admin_menu_text)
 
-        input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-        user_input = str(getch())[2]
+        input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "c"]
+        user_input = str(getch())[2].lower()
         while user_input not in input_list:
             print("[-] Invalid input!")
-            user_input = str(getch())[2]
+            user_input = str(getch())[2].lower()
 
         cls()
         match user_input:
@@ -378,6 +381,9 @@ def admin_login(uname):
             case "9":
                 set_admin()
 
+            case "c":
+                pass
+
             case "0":
                 cls()
                 return None
@@ -394,7 +400,7 @@ def user_login(uname):
     
         print(user_menu_text)
     
-        input_list = ["1", "2", "3", "0"]
+        input_list = ["1", "2", "3", "4", "0"]
         user_input = str(getch())[2]
         while user_input not in input_list:
             print("[-] Invalid input!")
@@ -409,6 +415,9 @@ def user_login(uname):
                 pass
 
             case "3":
+                pass
+
+            case "4":
                 pass
             
             case "0":
