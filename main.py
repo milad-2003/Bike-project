@@ -108,12 +108,26 @@ class Road_bike(Bike):
                           None)
 
 
+def check_space_existance(variable, word):
+    while " " in word:
+        print(f"[-] {variable} can not contain spaces!")
+        word = input(f"Press 'Enter' to exit or Type in the {variable} again: ")
+        if not word:
+            return None
+    
+    return word
+
+
 def check_username(uname):
     connection = database.connect("data.db")
     usernames = [x[2] for x in database.get_all_users(connection)]
     while uname in usernames:
         print("Username already exists!")
         uname = input("Press 'Enter' to exit or Type in a new username: ")
+        if not uname:
+            return None
+        
+        uname = check_space_existance("Username", uname)
         if not uname:
             return None
         
@@ -171,7 +185,6 @@ def sign_in(uname):
             print(f"Creating account with username: {uname}")
             return create_account(uname)
         else:
-            cls()
             return None
     
     password = input("Enter your password: ")
@@ -180,10 +193,8 @@ def sign_in(uname):
         password = input("Press 'Enter' to exit or Type in your password again: ")
         
         if not password:
-            cls()
             return None
     
-    cls()
     return uname
 
 
@@ -197,21 +208,22 @@ def create_account(uname):
     if not len(database.get_all_users(connection)):
         is_admin = 1
 
-    checked_username = check_username(uname)
+    space_checked_username = check_space_existance("Username", uname)
+    if not space_checked_username:
+        return None
+
+    checked_username = check_username(space_checked_username)
     if not checked_username:
-        cls()
         return None
         
     password = input("Enter your password (At least 8 characters): ")
     length_checked_password = check_password_length(password)
     if not length_checked_password:
-        cls()
         return None
         
     confirm_password = input("Enter your password again: ")
     confirm_password_checked = check_password_confirmation(length_checked_password, confirm_password)
     if not confirm_password_checked:
-        cls()
         return None
     
     f_name = input("Enter your first name: ")
@@ -220,7 +232,6 @@ def create_account(uname):
     new_user = User(f_name, l_name, checked_username, password, is_admin)
     new_user.add_to_database()
 
-    cls()
     return checked_username
 
 
@@ -233,6 +244,10 @@ def check_serial_number_exists(serial_num):
         serial_num = input("Press 'Enter' to exit or Type in a new serial number: ")
         if not serial_num:
             return None
+        
+        serial_num = check_space_existance("Serial Number", serial_num)
+        if not serial_num:
+            return None
     
     return serial_num
 
@@ -243,8 +258,12 @@ def add_bike():
     database.create_bikes_table(connection)
 
     serial_number = input("Enter the serial number: ")
-    checked_serial_number = check_serial_number_exists(serial_number)
-    if not checked_serial_number:
+    space_checked_serial_number = check_space_existance("Username", serial_number)
+    if not space_checked_serial_number:
+        return None
+
+    full_checked_serial_number = check_serial_number_exists(space_checked_serial_number)
+    if not full_checked_serial_number:
         return None
     
     input_list = ["r", "e"]
@@ -260,11 +279,11 @@ def add_bike():
 
     match type:
         case "r":
-            bike = Road_bike(checked_serial_number, "Road")
+            bike = Road_bike(full_checked_serial_number, "Road")
             bike.add_to_database()
 
         case "e":
-            bike = Electric_bike(checked_serial_number, "Electric")
+            bike = Electric_bike(full_checked_serial_number, "Electric")
             bike.add_to_database()
 
     print("[+] Bike added successfully!")
@@ -504,12 +523,14 @@ def main():
                 username = input("Enter your username: ")
 
                 logged_in_user = sign_in(username.lower())
+                cls()
 
             case "2":
                 print("Creating account...")
                 username = input("Enter a username: ")
 
                 logged_in_user = create_account(username)
+                cls()
                  
             case "3":
                 return 0
