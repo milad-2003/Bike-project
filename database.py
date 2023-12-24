@@ -30,7 +30,13 @@ queries = {
 
     "available_bikes_query": "SELECT * FROM bikes WHERE is_rented = 0;",
 
-    "set_as_admin_query": "UPDATE users SET is_admin = 1 WHERE username = ?;"
+    "set_as_admin_query": "UPDATE users SET is_admin = 1 WHERE username = ?;",
+
+    "get_bike_by_serial_number_query": "SELECT * FROM bikes WHERE serial_number = ?;",
+
+    "add_to_rented_query": "UPDATE users SET rental_list = ? WHERE username = ?;",
+
+    "set_rented": "UPDATE bikes SET is_rented = ? WHERE serial_number = ?;"
 }
 
 
@@ -83,3 +89,18 @@ def available_bikes(connection):
 def set_as_admin(connection, username):
     with connection:
         connection.execute(queries["set_as_admin_query"], (username, ))
+
+
+def get_bike_by_serial_number(connection, serial_num):
+    with connection:
+        return connection.execute(queries["get_bike_by_serial_number_query"], (serial_num, )).fetchone()
+
+
+def add_to_rented(connection, rental_list, username):
+    with connection:
+        connection.execute(queries["add_to_rented_query"], (rental_list, username))
+
+
+def set_rented(connection, is_rented, serial_num):
+    with connection:
+        connection.execute(queries["set_rented"], (is_rented, serial_num))
