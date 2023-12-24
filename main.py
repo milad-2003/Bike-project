@@ -350,6 +350,23 @@ def check_serial_number_not_exists(serial_num):
     return serial_num
 
 
+def check_bike_availablity(serial_num):
+    connection = database.connect("data.db")
+    bike = database.get_bike_by_serial_number(connection, serial_num)
+
+    if bike[2]:
+        print("[-] This bike is not available!")
+        input("\nPress 'Enter' to exit")
+        return False
+    
+    if bike[3] == 0:
+        print("[-] This bike has ran out of charge!")
+        input("Press 'Enter' to exit")
+        return False
+    
+    return True
+
+
 def rent_bike(uname):
     connection = database.connect("data.db")
     user = database.get_user_by_username(connection, uname)
@@ -365,26 +382,15 @@ def rent_bike(uname):
     if not checked_serial_number:
         return None
     
-    bike = database.get_bike_by_serial_number(connection, checked_serial_number)
-
-    if bike[2]:
-        print("[-] This bike is not available!")
+    if check_bike_availablity(checked_serial_number):
+        rental_list.append(checked_serial_number)
+        rental_str = " ".join(rental_list).strip()
+    
+        database.add_to_rented(connection, rental_str, uname)
+        database.set_rented(connection, 1, checked_serial_number)
+    
+        print("[+] Bike was successfully rented!")
         input("\nPress 'Enter' to exit")
-        return None
-    
-    if bike[3] == 0:
-        print("[-] This bike has ran out of charge!")
-        input("Press 'Enter' to exit")
-        return None
-    
-    rental_list.append(checked_serial_number)
-    rental_str = " ".join(rental_list).strip()
-
-    database.add_to_rented(connection, rental_str, uname)
-    database.set_rented(connection, 1, checked_serial_number)
-
-    print("[+] Bike was successfully rented!")
-    input("\nPress 'Enter' to exit")
 
 
 def admin_login(uname):
