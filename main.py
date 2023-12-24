@@ -317,15 +317,18 @@ def get_all_users():
     input("\n\nPress 'Enter' to exit")
 
 
-def get_all_bikes(availables_only = False):
+def get_all_bikes(availables_only = False, rented_only = False):
     connection = database.connect("data.db")
 
     if availables_only:
-        bikes = database.available_bikes(connection)
+        bikes = database.get_bikes_by_rented(connection, 0)
         table_title = "Available bikes"
+    elif rented_only:
+        bikes = database.get_bikes_by_rented(connection, 1)
+        table_title = "Rented bikes"
     else:
         bikes = database.get_all_bikes(connection)
-        table_title = "Bikes"
+        table_title = "All bikes"
 
     columns = ["Serial number", "Type", "Rented", "Charged"]
 
@@ -433,7 +436,7 @@ def admin_login(uname):
                 get_all_bikes(availables_only=True)
 
             case "2":
-                pass
+                get_all_bikes(rented_only=True)
 
             case "3":
                 pass

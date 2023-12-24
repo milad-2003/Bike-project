@@ -28,7 +28,7 @@ queries = {
 
     "get_all_bikes_query": "SELECT * FROM bikes;",
 
-    "available_bikes_query": "SELECT * FROM bikes WHERE is_rented = 0;",
+    "get_bikes_by_rented_query": "SELECT * FROM bikes WHERE is_rented = ?;",
 
     "set_as_admin_query": "UPDATE users SET is_admin = 1 WHERE username = ?;",
 
@@ -81,9 +81,9 @@ def get_all_bikes(connection):
         return connection.execute(queries["get_all_bikes_query"]).fetchall()
 
 
-def available_bikes(connection):
+def get_bikes_by_rented(connection, is_rented):
     with connection:
-        return connection.execute(queries["available_bikes_query"]).fetchall()
+        return connection.execute(queries["get_bikes_by_rented_query"], (is_rented, )).fetchall()
 
 
 def set_as_admin(connection, username):
