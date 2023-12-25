@@ -493,7 +493,7 @@ def user_login(uname):
                 pass
 
             case "3":
-                rent_bike()
+                rent_bike(uname)
 
             case "4":
                 pass
