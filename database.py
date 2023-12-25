@@ -36,7 +36,9 @@ queries = {
 
     "add_to_rented_query": "UPDATE users SET rental_list = ? WHERE username = ?;",
 
-    "set_rented": "UPDATE bikes SET is_rented = ? WHERE serial_number = ?;"
+    "set_rented_query": "UPDATE bikes SET is_rented = ? WHERE serial_number = ?;",
+
+    "set_charge_query": "UPDATE bikes SET is_charged = ? WHERE serial_number = ?;"
 }
 
 
@@ -103,4 +105,9 @@ def add_to_rented(connection, rental_list, username):
 
 def set_rented(connection, is_rented, serial_num):
     with connection:
-        connection.execute(queries["set_rented"], (is_rented, serial_num))
+        connection.execute(queries["set_rented_query"], (is_rented, serial_num))
+
+
+def set_charge(connection, is_charged, serial_num):
+    with connection:
+        connection.execute(queries["set_charge_query"], (is_charged, serial_num))

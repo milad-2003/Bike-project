@@ -415,6 +415,32 @@ def rent_bike(uname):
         input("\nPress 'Enter' to exit")
 
 
+def return_bike(username):
+    print("Returning a bike...")
+    connection = database.connect("data.db")
+    rental_list = database.get_user_by_username(connection, username)[5].split(" +")
+
+    serial_number = input("Enter the serial number of the bike: ")
+    while serial_number not in rental_list:
+        print("[-] You do not have this bike!")
+        serial_number = input("Press 'Enter' to exit or Type in the serial number again: ")
+        if not serial_number:
+            return None
+        
+    rental_list.remove(serial_number)
+    rental_str = " ".join(rental_list)
+
+    database.add_to_rented(connection, rental_str, username)
+    database.set_rented(connection, 0, serial_number)
+    
+    bike = database.get_bike_by_serial_number(connection, serial_number)
+    if bike[3]:
+        database.set_charge(connection, 0, serial_number)
+
+    print("[+] Bike was successfully returned!")
+    input("\nPress 'Enter' to exit")
+
+
 def admin_login(uname):
     while True:
         connection = database.connect("data.db")
@@ -439,7 +465,7 @@ def admin_login(uname):
                 get_all_bikes(rented_only=True)
 
             case "3":
-                pass
+                return_bike(uname)
 
             case "4":
                 rent_bike(uname)
@@ -490,7 +516,7 @@ def user_login(uname):
                 get_all_bikes(availables_only=True)
 
             case "2":
-                pass
+                return_bike(uname)
 
             case "3":
                 rent_bike(uname)
