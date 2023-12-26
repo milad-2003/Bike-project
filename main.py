@@ -390,6 +390,7 @@ def check_bike_availablity(serial_num):
 
 
 def rent_bike(uname):
+    print("Renting a bike...")
     connection = database.connect("data.db")
     user = database.get_user_by_username(connection, uname)
 
@@ -441,6 +442,26 @@ def return_bike(username):
     input("\nPress 'Enter' to exit")
 
 
+def charge_bike():
+    serial_number = input("Enter the serial number of the bike: ")
+    checked_serial_number = check_serial_number_not_exists(serial_number)
+
+    connection = database.connect("data.db")
+    bike = database.get_bike_by_serial_number(connection, checked_serial_number)
+
+    if bike[3]:
+        print("[-] This bike is already charged!")
+    
+    elif bike[3] == 0:
+        database.set_charge(connection, 1, checked_serial_number)
+        print("[+] Bike was successfully charged!")
+
+    else:
+        print("[-] This bike is not electric!")
+
+    input("\nPress 'Enter' to exit")
+
+
 def admin_login(uname):
     while True:
         connection = database.connect("data.db")
@@ -486,7 +507,7 @@ def admin_login(uname):
                 set_admin()
 
             case "c":
-                pass
+                charge_bike()
 
             case "0":
                 cls()
