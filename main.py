@@ -31,11 +31,10 @@ admin_menu_text = """
 3.Return a bike
 4.Rent a bike
 5.Add a bike
-6.Edit profile
+6.Charge a bike
 7.List of bikes
 8.List of users
 9.Set a user as admin
-c.Charge a bike
 0.Log out
 """
 
@@ -43,7 +42,6 @@ user_menu_text = """
 1.Available bikes
 2.Return a bike
 3.Rent a bike
-4.Edit profile
 0.Log out
 """
 
@@ -344,6 +342,8 @@ def get_all_bikes(availables_only = False, rented_only = False):
 
 
 def set_admin():
+    print("Setting a user as admin...")
+
     connection = database.connect("data.db")
     usernames = [user[2] for user in database.get_all_users(connection)]
 
@@ -449,6 +449,8 @@ def return_bike(username):
 
 
 def charge_bike():
+    print("Charging a bike...")
+
     serial_number = input("Enter the serial number of the bike: ")
     checked_serial_number = check_serial_number_not_exists(serial_number)
 
@@ -477,11 +479,11 @@ def admin_login(uname):
 
         print(admin_menu_text)
 
-        input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "c"]
-        user_input = str(getch())[2].lower()
+        input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+        user_input = str(getch())[2]
         while user_input not in input_list:
             print("[-] Invalid input!")
-            user_input = str(getch())[2].lower()
+            user_input = str(getch())[2]
 
         cls()
         match user_input:
@@ -501,7 +503,7 @@ def admin_login(uname):
                 add_bike()
 
             case "6":
-                pass
+                charge_bike()
             
             case "7":
                 get_all_bikes()
@@ -511,9 +513,6 @@ def admin_login(uname):
 
             case "9":
                 set_admin()
-
-            case "c":
-                charge_bike()
 
             case "0":
                 cls()
@@ -531,7 +530,7 @@ def user_login(uname):
     
         print(user_menu_text)
     
-        input_list = ["1", "2", "3", "4", "0"]
+        input_list = ["1", "2", "3", "0"]
         user_input = str(getch())[2]
         while user_input not in input_list:
             print("[-] Invalid input!")
@@ -547,9 +546,6 @@ def user_login(uname):
 
             case "3":
                 rent_bike(uname)
-
-            case "4":
-                pass
             
             case "0":
                 cls()
