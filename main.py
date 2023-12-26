@@ -318,6 +318,8 @@ def get_all_users():
 def get_all_bikes(availables_only = False, rented_only = False):
     connection = database.connect("data.db")
 
+    columns = ["Serial number", "Type", "Rented", "Charged"]
+
     if availables_only:
         bikes = database.get_bikes_by_rented(connection, 0)
         for bike in bikes:
@@ -327,14 +329,25 @@ def get_all_bikes(availables_only = False, rented_only = False):
         table_title = "Available bikes"
 
     elif rented_only:
-        bikes = database.get_bikes_by_rented(connection, 1)
+        columns.append("Rented by")
+
+        tuple_bikes = database.get_bikes_by_rented(connection, 1)
+        users = database.get_all_users(connection)
+        bikes = []
+        for bike in tuple_bikes:
+            bikes.append(list(bike))
+
+        for bike in bikes:
+            for user in users:
+                if bike[0] in user[5].split(" "):
+                    bike.append(user[2])
+                    break
+
         table_title = "Rented bikes"
 
     else:
         bikes = database.get_all_bikes(connection)
         table_title = "All bikes"
-
-    columns = ["Serial number", "Type", "Rented", "Charged"]
 
     print_table(table_title, columns, bikes)
 
