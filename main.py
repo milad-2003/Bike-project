@@ -322,10 +322,16 @@ def get_all_bikes(availables_only = False, rented_only = False):
 
     if availables_only:
         bikes = database.get_bikes_by_rented(connection, 0)
+        for bike in bikes:
+            if bike[3] == 0:
+                bikes.remove(bike)
+
         table_title = "Available bikes"
+
     elif rented_only:
         bikes = database.get_bikes_by_rented(connection, 1)
         table_title = "Rented bikes"
+
     else:
         bikes = database.get_all_bikes(connection)
         table_title = "All bikes"
@@ -419,7 +425,7 @@ def rent_bike(uname):
 def return_bike(username):
     print("Returning a bike...")
     connection = database.connect("data.db")
-    rental_list = database.get_user_by_username(connection, username)[5].split(" +")
+    rental_list = database.get_user_by_username(connection, username)[5].split(" ")
 
     serial_number = input("Enter the serial number of the bike: ")
     while serial_number not in rental_list:
