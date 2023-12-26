@@ -42,6 +42,7 @@ user_menu_text = """
 1.Available bikes
 2.Return a bike
 3.Rent a bike
+4.My bikes
 0.Log out
 """
 
@@ -534,6 +535,22 @@ def admin_login(uname):
         cls()
 
 
+def my_bikes(username):
+    connection = database.connect("data.db")
+    bikes = database.get_user_by_username(connection, username)[5].split(" ")
+
+    bike_rows = []
+    for bike in bikes:
+        row = database.get_bike_by_serial_number(connection, bike)
+        bike_rows.append(row)
+
+    columns = ["Serial number", "Type", "Rented", "Charged"]
+
+    print_table("My bikes", columns, bike_rows)
+
+    input("\nPress 'Enter' to exit")
+
+
 def user_login(uname):
     while True:
         connection = database.connect("data.db")
@@ -543,7 +560,7 @@ def user_login(uname):
     
         print(user_menu_text)
     
-        input_list = ["1", "2", "3", "0"]
+        input_list = ["1", "2", "3", "4", "0"]
         user_input = str(getch())[2]
         while user_input not in input_list:
             print("[-] Invalid input!")
@@ -560,6 +577,9 @@ def user_login(uname):
             case "3":
                 rent_bike(uname)
             
+            case "4":
+                my_bikes(uname)
+
             case "0":
                 cls()
                 return None
