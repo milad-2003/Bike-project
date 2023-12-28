@@ -35,6 +35,7 @@ admin_menu_text = """
 7.List of bikes
 8.List of users
 9.Set a user as admin
+B.My bikes
 0.Log out
 """
 
@@ -484,6 +485,27 @@ def charge_bike():
     input("\nPress 'Enter' to exit")
 
 
+def my_bikes(username):
+    try:
+        connection = database.connect("data.db")
+        bikes = database.get_user_by_username(connection, username)[5].split(" ")
+
+        bike_rows = []
+        for bike in bikes:
+            row = database.get_bike_by_serial_number(connection, bike)
+            bike_rows.append(row)
+
+        columns = ["Serial number", "Type", "Rented", "Charged"]
+
+        print_table("My bikes", columns, bike_rows)
+
+    except:
+        print("[-] You have no bikes!")
+
+    finally:
+        input("\nPress 'Enter' to exit")
+
+
 def admin_login(uname):
     while True:
         connection = database.connect("data.db")
@@ -493,11 +515,11 @@ def admin_login(uname):
 
         print(admin_menu_text)
 
-        input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
-        user_input = str(getch())[2]
+        input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "b", "0"]
+        user_input = str(getch())[2].lower()
         while user_input not in input_list:
             print("[-] Invalid input!")
-            user_input = str(getch())[2]
+            user_input = str(getch())[2].lower()
 
         cls()
         match user_input:
@@ -528,32 +550,14 @@ def admin_login(uname):
             case "9":
                 set_admin()
 
+            case "b":
+                my_bikes(uname)
+
             case "0":
                 cls()
                 return None
             
         cls()
-
-
-def my_bikes(username):
-    try:
-        connection = database.connect("data.db")
-        bikes = database.get_user_by_username(connection, username)[5].split(" ")
-
-        bike_rows = []
-        for bike in bikes:
-            row = database.get_bike_by_serial_number(connection, bike)
-            bike_rows.append(row)
-
-        columns = ["Serial number", "Type", "Rented", "Charged"]
-
-        print_table("My bikes", columns, bike_rows)
-
-    except:
-        print("[-] You have no bikes!")
-
-    finally:
-        input("\nPress 'Enter' to exit")
 
 
 def user_login(uname):
