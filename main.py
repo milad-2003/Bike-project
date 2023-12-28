@@ -536,19 +536,24 @@ def admin_login(uname):
 
 
 def my_bikes(username):
-    connection = database.connect("data.db")
-    bikes = database.get_user_by_username(connection, username)[5].split(" ")
+    try:
+        connection = database.connect("data.db")
+        bikes = database.get_user_by_username(connection, username)[5].split(" ")
 
-    bike_rows = []
-    for bike in bikes:
-        row = database.get_bike_by_serial_number(connection, bike)
-        bike_rows.append(row)
+        bike_rows = []
+        for bike in bikes:
+            row = database.get_bike_by_serial_number(connection, bike)
+            bike_rows.append(row)
 
-    columns = ["Serial number", "Type", "Rented", "Charged"]
+        columns = ["Serial number", "Type", "Rented", "Charged"]
 
-    print_table("My bikes", columns, bike_rows)
+        print_table("My bikes", columns, bike_rows)
 
-    input("\nPress 'Enter' to exit")
+    except:
+        print("[-] You have no bikes!")
+
+    finally:
+        input("\nPress 'Enter' to exit")
 
 
 def user_login(uname):
