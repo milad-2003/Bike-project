@@ -443,7 +443,7 @@ def return_bike(username):
     rental_list = database.get_user_by_username(connection, username)[5].split(" ")
 
     serial_number = input("Enter the serial number of the bike: ")
-    while serial_number not in rental_list:
+    while serial_number not in rental_list or not serial_number:
         print("[-] You do not have this bike!")
         serial_number = input("Press 'Enter' to exit or Type in the serial number again: ")
         if not serial_number:
