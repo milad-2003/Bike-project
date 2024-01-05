@@ -1,9 +1,13 @@
-from msvcrt import getch
 import database
 from os import system as command
 from platform import system as os
 from rich.console import Console
 from rich.table import Table
+if os() == "Windows":
+    from msvcrt import getch
+else:
+    import sys
+    from tty import setcbreak
 
 
 heading_text = """
@@ -173,20 +177,34 @@ def sign_in(uname):
     if not user:
         print("Username not found!")
         print(f"Create an account with '{uname}'? (Y/N)")
-
-        user_input = str(getch())[2]
-        input_list = ["y", "n", "Y", "N"]
-        while user_input not in input_list:
-            print("[-] You can only enter 'Y' or 'N'")
+        if os() == "Windows":
             user_input = str(getch())[2]
+            input_list = ["y", "n", "Y", "N"]
+            while user_input not in input_list:
+                print("[-] You can only enter 'Y' or 'N'")
+                user_input = str(getch())[2]
 
-        if user_input == "y":
-            cls()
-            print(f"Creating account with username: {uname}")
-            return create_account(uname)
+            if user_input == "y":
+                cls()
+                print(f"Creating account with username: {uname}")
+                return create_account(uname)
+            else:
+                return None
         else:
-            return None
-    
+            setcbreak(sys.stdin)
+            user_input = sys.stdin.read(1)
+            input_list = ["y", "n", "Y", "N"]
+            while user_input not in input_list:
+                print("[-] You can only enter 'Y' or 'N'")
+                user_input = sys.stdin.read(1)
+
+            if user_input == "y":
+                cls()
+                print(f"Creating account with username: {uname}")
+                return create_account(uname)
+            else:
+                return None
+            
     password = input("Enter your password: ")
     while password != user[3]:
         print("Username and password do not match!")
@@ -268,14 +286,28 @@ def add_bike():
     
     input_list = ["r", "e"]
     print("What's the type of the bike?\nEnter 'R' for 'Road' or 'E' for 'Electric': ")
-    type = (str(getch())[2]).lower()
+    if os() == "Windows":
+        type = (str(getch())[2]).lower()
+    else:
+        setcbreak(sys.stdin)
+        type = sys.stdin.read(1).lower()
+        
     while type not in input_list:
         print("[-] Invalid input!")
         print("Enter 'R' for 'Road' or 'E' for 'Electric' or Press 'Enter' to exit: ")
-        user_input = (str(getch())).lower()
-        if user_input[2:4] == "\\r":
-            return None
-        type = user_input[2]
+        if os() == "Windows":
+            user_input = (str(getch())).lower()
+            if user_input[2:4] == "\\r":
+                return None
+            type = user_input[2]
+        else:
+            setcbreak(sys.stdin)
+            user_input = (sys.stdin.read(1)).lower()
+            if user_input == "\\r":
+                return None
+            type = user_input
+            
+
 
     match type:
         case "r":
@@ -516,11 +548,17 @@ def admin_login(uname):
         print(admin_menu_text)
 
         input_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "b", "0"]
-        user_input = str(getch())[2].lower()
-        while user_input not in input_list:
-            print("[-] Invalid input!")
+        if os() == "Windows":     
             user_input = str(getch())[2].lower()
-
+            while user_input not in input_list:
+                print("[-] Invalid input!")
+                user_input = str(getch())[2].lower()
+        else:
+            setcbreak(sys.stdin)
+            user_input = sys.stdin.read(1).lower()
+            while user_input not in input_list:
+                print("[-] Invalid input!")
+                user_input = sys.stdin.read(1).lower()
         cls()
         match user_input:
             case "1":
@@ -570,11 +608,17 @@ def user_login(uname):
         print(user_menu_text)
     
         input_list = ["1", "2", "3", "4", "0"]
-        user_input = str(getch())[2]
-        while user_input not in input_list:
-            print("[-] Invalid input!")
+        if os() == "Windows":    
             user_input = str(getch())[2]
-
+            while user_input not in input_list:
+                print("[-] Invalid input!")
+                user_input = str(getch())[2]
+        else:
+            setcbreak(sys.stdin)
+            user_input = sys.stdin.read(1)
+            while user_input not in input_list:
+                print("[-] Invalid input!")
+                user_input = sys.stdin.read(1)
         cls()
         match user_input:
             case "1":
@@ -605,10 +649,15 @@ def main():
         print(sign_in_text)
     
         input_list = ["1", "2", "3"]
-        while (user_input := str(getch())[2]) not in input_list:
-            print("[-] You can only select 1, 2 or 3")
-            user_input = str(getch())[2]
-
+        if os() == "Windows":
+            while (user_input := str(getch())[2]) not in input_list:
+                print("[-] You can only select 1, 2 or 3")
+                user_input = str(getch())[2]
+        else:
+            setcbreak(sys.stdin)
+            while (user_input := sys.stdin.read(1)) not in input_list:
+                print("[-] You can only select 1, 2 or 3")
+                user_input = sys.stdin.read(1)
         cls()
         match user_input:
 
