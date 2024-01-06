@@ -184,12 +184,6 @@ def sign_in(uname):
                 print("[-] You can only enter 'Y' or 'N'")
                 user_input = str(getch())[2]
 
-            if user_input == "y":
-                cls()
-                print(f"Creating account with username: {uname}")
-                return create_account(uname)
-            else:
-                return None
         else:
             setcbreak(sys.stdin)
             user_input = sys.stdin.read(1)
@@ -198,12 +192,12 @@ def sign_in(uname):
                 print("[-] You can only enter 'Y' or 'N'")
                 user_input = sys.stdin.read(1)
 
-            if user_input == "y":
-                cls()
-                print(f"Creating account with username: {uname}")
-                return create_account(uname)
-            else:
-                return None
+        if user_input == "y":
+            cls()
+            print(f"Creating account with username: {uname}")
+            return create_account(uname)
+        else:
+            return None
             
     password = input("Enter your password: ")
     while password != user[3]:
